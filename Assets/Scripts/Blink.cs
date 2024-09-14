@@ -15,7 +15,7 @@ public class FlashingController : MonoBehaviour
         if (isFlashing)
         {
             float alpha = 1 - (Time.time * flashDuration)%1.0f;
-            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1, alpha));
+            GetComponent<Renderer>().material.SetColor("_Color", new Color(1, 1, 1, alpha));  
         }
 
         if (GetComponent<Renderer>().material.color.a <= 0)

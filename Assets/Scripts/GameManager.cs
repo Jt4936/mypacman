@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
         {
             float interval = Time.realtimeSinceStartup - m_level_start;
             Debug.Log("start level====>" + interval);
-            if (interval > 4)
+            if (interval > 5)
             {
                 m_countdown.text = "";
                 Pause();
