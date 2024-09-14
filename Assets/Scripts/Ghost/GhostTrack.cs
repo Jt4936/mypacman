@@ -7,7 +7,7 @@ public class GhostTrack : Ghost
     public Transform m_wayPoint;
     public Transform m_target;
     public float m_speed;
-    public PacstudentMove m_pacstudent;
+    public PacStudent m_pacstudent;
     private Transform m_frontPoint;//避免死循环移动，不走回头路
     private Transform m_iniWayPoint;
     private Transform m_iniTarget;
@@ -21,7 +21,7 @@ public class GhostTrack : Ghost
     // Update is called once per frame
     void Update()
     {
-        if (m_target == null || WinCondiction.m_isWin == true || GameManager.m_paused == true)
+        if (m_target == null || GameManager.m_paused == true)
         {
             return;
         }
@@ -40,7 +40,7 @@ public class GhostTrack : Ghost
 
     private void ChangeWayPoint()
     {
-        if (m_pacstudent.m_pacstudentState == PacstudentMove.Pacstudent_Normal || m_pacstudent.m_pacstudentState == PacstudentMove.Pacstudent_Hurt)//吃豆人正常状态或受伤状态下，接近吃豆人
+        if (m_pacstudent.m_pacstudentState == PacStudent.Pacstudent_Normal || m_pacstudent.m_pacstudentState == PacStudent.Pacstudent_Hurt)//吃豆人正常状态或受伤状态下，接近吃豆人
         {
             Transform nextWay = m_wayPoint;//下一个路点，设为上一路点仅是为了避免报空值错误
             float distance = float.MaxValue;//初始距离设为最大值
@@ -55,7 +55,7 @@ public class GhostTrack : Ghost
             }
             m_wayPoint = nextWay;
         }
-        else if (m_pacstudent.m_pacstudentState == PacstudentMove.Pacstudent_Invicible)//吃豆人无敌状态下，远离吃豆人
+        else if (m_pacstudent.m_pacstudentState == PacStudent.Pacstudent_Invicible)//吃豆人无敌状态下，远离吃豆人
         {
             Transform nextWay = m_wayPoint;//下一个路点，设为上一路点仅是为了避免报空值错误
             float distance = 0;//初始距离设为最小值

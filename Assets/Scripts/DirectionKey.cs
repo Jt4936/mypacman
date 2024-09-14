@@ -27,17 +27,16 @@ public class DirectionKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         switch (m_direction)
         {
             case 0:
-                PacstudentMove.m_PacstudentMoveState = PacstudentMove.MOVE_UP;
-
+                PacStudent.m_PacstudentMoveState = PacStudent.MOVE_UP;
                 break;
             case 1:
-                PacstudentMove.m_PacstudentMoveState = PacstudentMove.MOVE_DOWN;
+                PacStudent.m_PacstudentMoveState = PacStudent.MOVE_DOWN;
                 break;
             case 2:
-                PacstudentMove.m_PacstudentMoveState = PacstudentMove.MOVE_LEFT;
+                PacStudent.m_PacstudentMoveState = PacStudent.MOVE_LEFT;
                 break;
             case 3:
-                PacstudentMove.m_PacstudentMoveState = PacstudentMove.MOVE_RIGHT;
+                PacStudent.m_PacstudentMoveState = PacStudent.MOVE_RIGHT;
                 break;
 
         }
@@ -45,6 +44,6 @@ public class DirectionKey : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        PacstudentMove.m_PacstudentMoveState = PacstudentMove.MOVE_NONE;
+        PacStudent.m_PacstudentMoveState = PacStudent.MOVE_NONE;
     }
 }

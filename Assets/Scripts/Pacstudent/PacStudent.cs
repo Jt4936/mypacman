@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PacstudentMove : MonoBehaviour
+public class PacStudent : MonoBehaviour
 {
     public float speed = 0.4f;
     Vector2 dest = Vector2.zero;
@@ -26,6 +26,13 @@ public class PacstudentMove : MonoBehaviour
     public ParticleSystem particleSystem;
 
     public static bool PACSTUDENT_CANMOVE = true;
+
+    public AudioSource audioSource;
+    public AudioClip moveClip;
+    public AudioClip eatClip;
+    public AudioClip deathClip;
+    public AudioClip collidesClip;
+
     // Use this for initialization
     void Start()
     {
@@ -43,7 +50,7 @@ public class PacstudentMove : MonoBehaviour
         if (m_pacstudentState == Pacstudent_Invicible)
         {
             m_invicibleTimer -= Time.deltaTime;
-            if (m_invicibleTimer <= m_invicibleFlashTime)//小于闪烁时间时，每隔0.5s闪烁
+            if (m_invicibleTimer <= m_invicibleFlashTime)
             {
                 m_invicibleFlashTimer += Time.deltaTime;
                 if (m_invicibleFlashTimer >= 0.5f)
@@ -81,12 +88,13 @@ public class PacstudentMove : MonoBehaviour
         {
             PACSTUDENT_CANMOVE = valid((Vector2.left + Vector2.up * 0.3f) * 2) && valid((Vector2.left + Vector2.down * 0.3f) * 2);
         }
-        print("CanMove:" + PACSTUDENT_CANMOVE);
+        
     }
 
     void FixedUpdate()
     {
-        if (GameManager.m_paused == true || WinCondiction.m_isWin == true)
+       
+        if (GameManager.m_paused == true)
         {
             return;
         }
@@ -96,7 +104,7 @@ public class PacstudentMove : MonoBehaviour
         // Check for Input if not moving
         if ((Vector2)transform.position == dest)
         {
-            print("Move:"+m_PacstudentMoveState);
+            print("press Move:"+m_PacstudentMoveState);
             if (m_PacstudentMoveState == MOVE_UP && valid((Vector2.up + Vector2.left * 0.3f) * 2) && valid((Vector2.up + Vector2.right * 0.3f) * 2))
                 dest = (Vector2)transform.position + Vector2.up;
             if (m_PacstudentMoveState == MOVE_RIGHT && valid((Vector2.right + Vector2.up * 0.3f) * 2) && valid((Vector2.right + Vector2.down * 0.3f) * 2))
@@ -106,20 +114,57 @@ public class PacstudentMove : MonoBehaviour
             if (m_PacstudentMoveState == MOVE_LEFT && valid((Vector2.left + Vector2.up * 0.3f) * 2) && valid((Vector2.left + Vector2.down * 0.3f) * 2))
                 dest = (Vector2)transform.position - Vector2.right;
 
-            if (Input.GetKey(KeyCode.UpArrow) && valid((Vector2.up + Vector2.left * 0.3f) * 2) && valid((Vector2.up + Vector2.right * 0.3f) * 2))
-                dest = (Vector2)transform.position + Vector2.up;
-            if (Input.GetKey(KeyCode.RightArrow) && valid((Vector2.right + Vector2.up * 0.3f) * 2) && valid((Vector2.right + Vector2.down * 0.3f) * 2))
-                dest = (Vector2)transform.position + Vector2.right;
-            if (Input.GetKey(KeyCode.DownArrow) && valid((Vector2.down + Vector2.left * 0.3f) * 2) && valid((Vector2.down + Vector2.right * 0.3f) * 2))
-                dest = (Vector2)transform.position - Vector2.up;
-            if (Input.GetKey(KeyCode.LeftArrow) && valid((Vector2.left + Vector2.up * 0.3f) * 2) && valid((Vector2.left + Vector2.down * 0.3f) * 2))
-                dest = (Vector2)transform.position - Vector2.right;
+
+
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                if (valid((Vector2.up + Vector2.left * 0.3f) * 2) && valid((Vector2.up + Vector2.right * 0.3f) * 2))
+                {
+                    dest = (Vector2)transform.position + Vector2.up;
+                    PlayClip("move", 1);
+                }
+                else
+                    PlayClip("collides", 1);
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                if (valid((Vector2.right + Vector2.up * 0.3f) * 2) && valid((Vector2.right + Vector2.down * 0.3f) * 2))
+                {
+                    dest = (Vector2)transform.position + Vector2.right;
+                    PlayClip("move", 1);
+                }
+                else
+                    PlayClip("collides", 1);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                if (valid((Vector2.down + Vector2.left * 0.3f) * 2) && valid((Vector2.down + Vector2.right * 0.3f) * 2)) { 
+                    dest = (Vector2)transform.position - Vector2.up;
+                    PlayClip("move", 1);
+                }
+                else
+                    PlayClip("collides", 1);
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                if (valid((Vector2.left + Vector2.up * 0.3f) * 2) && valid((Vector2.left + Vector2.down * 0.3f) * 2))
+                {
+                    dest = (Vector2)transform.position - Vector2.right;
+
+                    PlayClip("move", 1);
+                }
+                else
+                    PlayClip("collides", 1);
+
+            }
         }
         // Animation Parameters
         Vector2 dir = dest - (Vector2)transform.position;
         GetComponent<Animator>().SetFloat("DirX", dir.x);
         GetComponent<Animator>().SetFloat("DirY", dir.y);
+        
     }
+
     bool valid(Vector2 dir)
     {
         // Cast Line from 'next to Pac-Man' to 'Pac-Man'
@@ -196,4 +241,76 @@ public class PacstudentMove : MonoBehaviour
         ChangeState(Pacstudent_Normal);
 
     }
+
+    public void PlayClip(string clip_name, float duration)
+    {
+        if (audioSource != null)
+        {
+            if(clip_name == "move")
+                audioSource.clip = moveClip;
+            else if (clip_name == "eat")
+                audioSource.clip = eatClip;
+            else if (clip_name == "death")
+                audioSource.clip = deathClip;
+            else if (clip_name == "collides")
+                audioSource.clip = collidesClip;
+
+            audioSource.Play(); 
+
+            Invoke("StopClip", duration);
+        }
+    }
+
+    void StopClip()
+    {
+        if (audioSource != null)
+        {
+            audioSource.Stop(); 
+        }
+
+    }
+
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        
+        if (collider.tag.CompareTo("Dot") == 0)
+        {
+            GameManager.Instant.AddScore(1);
+            GameManager.Instant.EatDot();
+            Destroy(collider.gameObject);
+        }
+        else if (collider.tag.CompareTo("Ghost") == 0)
+        {
+            int pacstudentState = m_pacstudentState;
+            if (pacstudentState == Pacstudent_Normal)
+            {
+                //m_Restart.SetActive(true);
+                //Destroy(collider.gameObject);
+                m_life--;
+                if (m_life <= 0)
+                {
+                    GameManager.Instant.SaveHighScore();
+                    GameObject.Find("Main Camera").GetComponent<GameManager>().GameOver();
+                }
+                else
+                {
+                    PlayClip("death", 3);
+                    ChangeState(Pacstudent_Hurt);
+                }
+            }
+            else if (pacstudentState == Pacstudent_Invicible)
+            {
+                GameManager.Instant.AddScore(100);
+                GameManager.Instant.GhostRevenge(gameObject);
+            }
+            else if (pacstudentState == Pacstudent_Hurt)
+            {
+
+            }
+
+        }
+     
+    }
+
 }

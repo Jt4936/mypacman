@@ -142,7 +142,7 @@ public class GameManager : MonoBehaviour {
 
         if (m_lifeText!=null)
         {
-            m_lifeText.text = "X " + PacstudentMove.m_life;
+            m_lifeText.text = "X " + PacStudent.m_life;
         }
      
 
@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviour {
     public void ReStart()
     {
         SceneManager.LoadScene("ChooseLevel");
-        PacstudentMove.m_life = PacstudentMove.m_maxLife; 
+        PacStudent.m_life = PacStudent.m_maxLife; 
     }
     public void AddScore(int score)
     {
@@ -162,6 +162,7 @@ public class GameManager : MonoBehaviour {
         }
         m_scoreText.text = "Score:" + m_score;
         m_highScoreText.text = "HighScore:" + m_highScore;
+        GameObject.Find("pacStudent").GetComponent<PacStudent>().PlayClip("eat", 1);
     }
 
     public void GhostRevenge(GameObject ghost)
@@ -292,14 +293,14 @@ public class GameManager : MonoBehaviour {
     public void LoadLScene1()
     {
         SceneManager.LoadScene("01");
-        PacstudentMove.m_life = PacstudentMove.m_maxLife;
+        PacStudent.m_life = 3;
         m_level_start = Time.realtimeSinceStartup;
     }
 
     public void LoadLScene2()
     {
         SceneManager.LoadScene("02");
-        PacstudentMove.m_life = PacstudentMove.m_maxLife;
+        PacStudent.m_life = 3;
     }
 
     public void GoIntroductionScene()
@@ -329,5 +330,10 @@ public class GameManager : MonoBehaviour {
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void GameOver()
+    {
+        print("Game Over....");
     }
 }

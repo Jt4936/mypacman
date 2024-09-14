@@ -7,7 +7,10 @@ public class AudioManager : MonoBehaviour {
     public static int m_audioSize;
     public AudioSource audioSource;      
     public AudioClip introClip;   
-    public AudioClip normalClip;    
+    public AudioClip normalClip;
+    public AudioClip deadClip;
+    public AudioClip scaredClip;
+
     private bool isIntroPlayed = false; 
 
 
@@ -54,6 +57,20 @@ public class AudioManager : MonoBehaviour {
         {
             audioSource.clip = normalClip;
             audioSource.loop = true; 
+            audioSource.Play();
+        }
+    }
+
+    public void PlayClip(string clipName)
+    {
+        if(clipName == "dead")
+        {
+            audioSource.clip = deadClip;
+            audioSource.Play();
+        }
+        else if (clipName == "scared")
+        {
+            audioSource.clip = scaredClip;
             audioSource.Play();
         }
     }

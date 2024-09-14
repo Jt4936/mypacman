@@ -5,7 +5,7 @@ using UnityEngine;
 public class GhostMove : Ghost {
     public Transform[] m_wayPoints;
     public int m_curPos = 0;
-    public PacstudentMove m_pacstudent;
+    public PacStudent m_pacstudent;
     public float m_speed = 0.3f;
     public bool m_isToNear = false;
     public Transform nearWayPoint;
@@ -21,7 +21,7 @@ public class GhostMove : Ghost {
 
     void FixedUpdate()
     {
-        if (m_pacstudent.m_pacstudentState == PacstudentMove.Pacstudent_Normal)
+        if (m_pacstudent.m_pacstudentState == PacStudent.Pacstudent_Normal)
         {
             m_isToNear = false;
             if (transform.position != m_wayPoints[m_curPos].position)
@@ -39,7 +39,7 @@ public class GhostMove : Ghost {
             GetComponent<Animator>().SetFloat("DirX", dir.x);
             GetComponent<Animator>().SetFloat("DirY", dir.y);
         }
-        else if(m_pacstudent.m_pacstudentState == PacstudentMove.Pacstudent_Invicible)
+        else if(m_pacstudent.m_pacstudentState == PacStudent.Pacstudent_Invicible)
         {
             if (m_isToNear == false)
             {
