@@ -9,6 +9,8 @@ TagManager:
   - Dot
   - BackgroundMusic
   - MyFristMap
+  - Ghost
+  - SuperDot
   layers:
   - Default
   - TransparentFX

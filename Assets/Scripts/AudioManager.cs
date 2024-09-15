@@ -11,6 +11,8 @@ public class AudioManager : MonoBehaviour {
     public AudioClip deadClip;
     public AudioClip scaredClip;
 
+
+
     private bool isIntroPlayed = false; 
 
 
