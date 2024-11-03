@@ -299,6 +299,7 @@ public class GameManager : MonoBehaviour {
 
     public void LoadLScene2()
     {
+
         SceneManager.LoadScene("02");
         PacStudent.m_life = 3;
     }
